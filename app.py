@@ -5,11 +5,11 @@ This module is the entry point for running the Flask application.
 
 print("Loading app.py")
 
-#from app import create_app  # Absolute import from the main package
+from __init__ import create_app  # Adjusted import from app package
 
 print("Imported create_app in app.py")
 
-#app = create_app()
+app = create_app()
 
 if __name__ == '__main__':
     print("Running app from app.py")

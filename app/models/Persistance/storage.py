@@ -9,15 +9,19 @@ class Storage:
     """
     Storage class for handling data persistence.
     """
-    DATA_DIR = os.getenv('DATA_DIR', '/default/path/to/your/data')
+    FILE_NAME = "data.json"
+    data = []
 
-    def save(self, entity):
+
+    def new(self, instance):
+        pass
+    def save(self, instance):
         """Save an entity to a file."""
-        if not os.path.exists(self.DATA_DIR):
-            os.makedirs(self.DATA_DIR)
-        file_path = os.path.join(self.DATA_DIR, f'{entity.id}.json')
-        with open(file_path, 'w') as file:
-            json.dump(entity.to_dict(), file, indent=4)
+        to_save = instance.to_dict()
+        to_save['created_at'] = str(to_save['created_at'])
+        to_save['updated_at'] = str(to_save['updated_at'])
+        with open(Storage.FILE_NAME, 'w') as file:
+            json.dump(to_save, file, indent=4)
 
     def get(self, entity_id):
         """Retrieve an entity by its ID."""

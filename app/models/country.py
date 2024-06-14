@@ -2,7 +2,7 @@
 This module defines the Country class.
 """
 
-from app.models.Persistance.storage import Storage
+from app.storage import Storage
 
 class Country:
     """

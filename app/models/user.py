@@ -7,7 +7,7 @@ import json
 import os
 from datetime import datetime
 from .base_model import BaseModel
-from app.storage import Storage
+from app.models.Persistance.storage import Storage
 from .review import Review
 
 class User(BaseModel):

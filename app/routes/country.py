@@ -10,13 +10,13 @@ country_bp = Blueprint('countries', __name__, url_prefix='/countries')
 @country_bp.route('/', methods=['GET'])
 def get_countries():
     """Retrieve a list of all countries."""
-    countries = Country.get_all()
+    countries = Country.all()
     return jsonify([country.to_dict() for country in countries])
 
 @country_bp.route('/<code>', methods=['GET'])
 def get_country(code):
     """Retrieve a specific country by code."""
-    country = Country.get_by_code(code)
+    country = Country.all(code)
     if country:
         return jsonify(country.to_dict())
     return jsonify({'error': 'Country not found'}), 404
@@ -24,7 +24,7 @@ def get_country(code):
 @country_bp.route('/<code>', methods=['PUT'])
 def update_country(code):
     """Update an existing country."""
-    country = Country.get_by_code(code)
+    country = Country.all(code)
     if not country:
         return jsonify({'error': 'Country not found'}), 404
     data = request.get_json()

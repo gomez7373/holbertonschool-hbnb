@@ -10,7 +10,7 @@ city_bp = Blueprint('cities', __name__, url_prefix='/cities')
 @city_bp.route('/', methods=['GET'])
 def get_cities():
     """Retrieve a list of all cities."""
-    cities = City.storage.all(City)
+    cities = City.all("City")
     return jsonify([city.to_dict() for city in cities])
 
 @city_bp.route('/', methods=['POST'])
@@ -24,7 +24,7 @@ def create_city():
 @city_bp.route('/<city_id>', methods=['GET'])
 def get_city(city_id):
     """Retrieve a specific city by ID."""
-    city = City.get_by_id(city_id)
+    city = City.all(city_id)
     if city:
         return jsonify(city.to_dict())
     return jsonify({'error': 'City not found'}), 404

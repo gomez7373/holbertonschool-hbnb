@@ -10,6 +10,7 @@ class BaseModel:
     """
     Base model class that includes common attributes and methods.
     """
+    manager = storage.Storage()
 
     def __init__(self, **kwargs):
         """Initialize the base model with unique ID and timestamps."""
@@ -20,16 +21,15 @@ class BaseModel:
             
         else:
             self.id = kwargs.get("id")
-            self.created_at = kwargs.get("created_at")
-            self.updated_at = kwargs.get("updated_at")
+            self.created_at = datetime.fromisoformat(kwargs.get("created_at"))
+            self.updated_at = datetime.fromisoformat(kwargs.get("updated_at"))
             self.__dict__.update(kwargs)
             
     
     def save(self):
         """Update the updated_at timestamp
         """
-        manager = storage.Storage()
-        manager.new(self)       
+        BaseModel.manager.new(self)       
         self.updated_at = datetime.now()
     
     def to_dict(self):
@@ -39,6 +39,20 @@ class BaseModel:
         new_dict["updated_at"] = self.updated_at.isoformat()
         return new_dict
 
-#temp= BaseModel()
-#temp.save()
-#print(temp.to_dict())
+    def save_to_json(self):
+        
+        BaseModel.manager.save()
+
+    def delete(self):
+        
+        BaseModel.manager.delete(self.id)
+
+    def update(self, *args, **kwargs):
+        if args: 
+            for i in args:
+                self.__dict__[str(i)] = i
+        elif kwargs:
+             self.__dict__.update(kwargs)
+        else
+            print("Nothing to update.")
+

@@ -4,6 +4,11 @@ This module defines the Storage class for handling data persistence.
 
 import json
 import os
+from models.user import User
+from models.city import City
+from models.review import Review
+from models.country import Country
+from models.place import Place
 
 class Storage:
     """
@@ -11,42 +16,55 @@ class Storage:
     """
     FILE_NAME = "data.json"
     data = []
-
+    classes = {
+            "User": User,
+            "City": City,
+            "Place":Place,
+            "Review": Review,
+            "Country": Country
+            }
 
     def new(self, instance):
-        pass
+
+
+        Storage.data.append(instance)
     def save(self, instance):
         """Save an entity to a file."""
-        to_save = instance.to_dict()
-        to_save['created_at'] = str(to_save['created_at'])
-        to_save['updated_at'] = str(to_save['updated_at'])
+        prep = []
+        for obj in Storage.data:
+            prep.append(obj.to_dict())
+
+
         with open(Storage.FILE_NAME, 'w') as file:
-            json.dump(to_save, file, indent=4)
+            json.dump(prep, file, indent=4)
 
-    def get(self, entity_id):
-        """Retrieve an entity by its ID."""
-        file_path = os.path.join(self.DATA_DIR, f'{entity_id}.json')
-        if not os.path.exists(file_path):
-            return None
-        with open(file_path, 'r') as file:
-            data = json.load(file)
-            return data
 
-    def delete(self, entity_id):
+    def delete(self, obj_id):
         """Delete an entity by its ID."""
-        file_path = os.path.join(self.DATA_DIR, f'{entity_id}.json')
-        if os.path.exists(file_path):
-            os.remove(file_path)
-            return True
-        return False
+        for indx, data in enumerate(Storage.data):
+            if obj_id in data.to_dict().values():
+                return Storage.data.pop(indx)
 
-    def all(self, cls):
+
+    def all(self, target=None):
+        content = []
+        if target:
+            for obj in Storage.data:
+
+                if target in obj.to_dict().values():
+                    content.append(obj)
+            return content
+
         """Retrieve all entities of a class."""
-        entities = []
-        for file_name in os.listdir(self.DATA_DIR):
-            if file_name.endswith('.json'):
-                with open(os.path.join(self.DATA_DIR, file_name), 'r') as file:
-                    data = json.load(file)
-                    if data.get('id').startswith(cls.__name__):
-                        entities.append(cls.from_dict(data))
-        return entities
+        return Storage.data
+
+    def load(self):
+        try: 
+            with open(Storage.FILE_NAME,"r") as file:
+                objects = json.load(file)
+                for obj in objects:
+                    temp = Storage.classes.get(obj["class"])(obj)
+                    temp.save()
+        except: 
+            print("Couldn't load the file.")
+

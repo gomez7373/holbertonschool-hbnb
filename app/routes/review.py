@@ -10,7 +10,7 @@ review_bp = Blueprint('reviews', __name__, url_prefix='/reviews')
 @review_bp.route('/', methods=['GET'])
 def get_reviews():
     """Retrieve a list of all reviews."""
-    reviews = Review.storage.all(Review)
+    reviews = Review.all(Review)
     return jsonify([review.to_dict() for review in reviews])
 
 @review_bp.route('/', methods=['POST'])
@@ -29,7 +29,7 @@ def create_review():
 @review_bp.route('/<review_id>', methods=['GET'])
 def get_review(review_id):
     """Retrieve a specific review by ID."""
-    review = Review.get_by_id(review_id)
+    review = Review.all(review_id)
     if review:
         return jsonify(review.to_dict())
     return jsonify({'error': 'Review not found'}), 404

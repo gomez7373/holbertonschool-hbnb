@@ -10,7 +10,7 @@ place_bp = Blueprint('places', __name__, url_prefix='/places')
 @place_bp.route('/', methods=['GET'])
 def get_places():
     """Retrieve a list of all places."""
-    places = Place.storage.all(Place)
+    places = Place.all(Place)
     return jsonify([place.to_dict() for place in places])
 
 @place_bp.route('/', methods=['POST'])
@@ -32,7 +32,7 @@ def create_place():
 @place_bp.route('/<place_id>', methods=['GET'])
 def get_place(place_id):
     """Retrieve a specific place by ID."""
-    place = Place.get_by_id(place_id)
+    place = Place.all(place_id)
     if place:
         return jsonify(place.to_dict())
     return jsonify({'error': 'Place not found'}), 404

@@ -10,7 +10,7 @@ user_bp = Blueprint('users', __name__, url_prefix='/users')
 @user_bp.route('/', methods=['GET'])
 def get_users():
     """Retrieve a list of all users."""
-    users = User.storage.all(User)
+    users = User.all(User)
     return jsonify([user.to_dict() for user in users])
 
 @user_bp.route('/', methods=['POST'])
@@ -29,7 +29,7 @@ def create_user():
 @user_bp.route('/<user_id>', methods=['GET'])
 def get_user(user_id):
     """Retrieve a specific user by ID."""
-    user = User.get_by_id(user_id)
+    user = User.all(user_id)
     if user:
         return jsonify(user.to_dict())
     return jsonify({'error': 'User not found'}), 404

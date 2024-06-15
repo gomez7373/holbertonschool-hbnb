@@ -29,11 +29,16 @@ class BaseModel:
         """Update the updated_at timestamp
         """
         manager = storage.Storage()
-        manager.save(self)       
+        manager.new(self)       
         self.updated_at = datetime.now()
+    
     def to_dict(self):
         new_dict = self.__dict__.copy()
-        return new_dict     
-temp= BaseModel()
-temp.save()
+        new_dict["class"] = self.__class__.__name__
+        new_dict["created_at"] = self.created_at.isoformat()
+        new_dict["updated_at"] = self.updated_at.isoformat()
+        return new_dict
+
+#temp= BaseModel()
+#temp.save()
 #print(temp.to_dict())

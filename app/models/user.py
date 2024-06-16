@@ -6,7 +6,7 @@ import hashlib
 import json
 import os
 from datetime import datetime
-from base_model import BaseModel
+from .base_model import BaseModel
 #from app.models.Persistance.storage import Storage
 #from review import Review
 

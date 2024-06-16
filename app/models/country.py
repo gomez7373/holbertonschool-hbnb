@@ -1,7 +1,7 @@
 """
 This module defines the Country class.
 """
-from base_model import BaseModel
+from .base_model import BaseModel
 #from app.models.Persistance.storage import Storage
 
 class Country(BaseModel):

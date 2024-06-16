@@ -10,7 +10,8 @@ city_bp = Blueprint('cities', __name__, url_prefix='/cities')
 @city_bp.route('/', methods=['GET'])
 def get_cities():
     """Retrieve a list of all cities."""
-    cities = City.all("City")
+    temp = City()
+    cities = temp.all("City")
     return jsonify([city.to_dict() for city in cities])
 
 @city_bp.route('/', methods=['POST'])

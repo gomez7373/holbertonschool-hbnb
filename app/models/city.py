@@ -5,7 +5,7 @@ This module defines the City class.
 import json
 import os
 from datetime import datetime
-from base_model import BaseModel
+from .base_model import BaseModel
 #from app.models.Persistance.storage import Storage
 
 class City(BaseModel):

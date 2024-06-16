@@ -4,13 +4,13 @@ This module defines the BaseModel class.
 
 import uuid
 from datetime import datetime
-import Persistance.storage as storage
+from app.models.Persistance.storage import Storage as storage
 
 class BaseModel:
     """
     Base model class that includes common attributes and methods.
     """
-    manager = storage.Storage()
+    manager = storage()
 
     def __init__(self, **kwargs):
         """Initialize the base model with unique ID and timestamps."""

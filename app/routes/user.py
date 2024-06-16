@@ -6,6 +6,7 @@ from flask import Blueprint, request, jsonify
 from app.models.user import User
 
 user_bp = Blueprint('users', __name__, url_prefix='/users')
+users = []
 
 @user_bp.route('/', methods=['GET'])
 def get_users():
@@ -13,18 +14,25 @@ def get_users():
     users = User.all(User)
     return jsonify([user.to_dict() for user in users])
 
-@user_bp.route('/', methods=['POST'])
+@user_bp.route('/users', methods=['POST'])
 def create_user():
-    """Create a new user."""
     data = request.get_json()
-    new_user = User(
-        email=data['email'],
-        password=data['password'],
-        first_name=data['first_name'],
-        last_name=data['last_name']
-    )
-    new_user.save_to_file()
-    return jsonify(new_user.to_dict()), 201
+    if not data or not 'name' in data or not 'email' in data:
+        return jsonify({'error': 'Invalid input'}), 400
+
+    # Check if user already exists
+    for user in users:
+        if user['email'] == data['email']:
+            return jsonify({'error': 'User already exists'}), 400
+
+    # Create new user
+    new_user = {
+        'id': len(users) + 1,
+        'name': data['name'],
+        'email': data['email']
+    }
+    users.append(new_user)
+    return jsonify({'message': 'User created', 'user': new_user}), 201
 
 @user_bp.route('/<user_id>', methods=['GET'])
 def get_user(user_id):
